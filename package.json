@@ -1,21 +1,21 @@
 {
-  "name": "finance-app-serv",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@eslint/js": "^9.3.0",
-    "eslint": "^9.3.0",
-    "globals": "^15.3.0",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.5"
-  }
+    "name": "finance-app-serv",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky",
+        "pre-commit": "lint-staged"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@eslint/js": "^9.3.0",
+        "eslint": "^9.3.0",
+        "globals": "^15.3.0",
+        "lint-staged": "^15.2.5"
+    }
 }
