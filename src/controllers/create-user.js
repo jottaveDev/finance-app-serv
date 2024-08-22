@@ -1,5 +1,5 @@
 import validator from 'validator'
-import { badRequest, created, serverError } from './helpers'
+import { badRequest, created, serverError } from './helpers.js'
 
 export class CreateUserController {
     constructor(createUserUseCase) {
