@@ -3,6 +3,7 @@ import express from 'express'
 import { CreateUserController } from './src/controllers/create-user.js'
 import { GetUserByIdController } from './src/controllers/get-user-by-id.js'
 import { PostgresCreateUserRepository } from './src/repositories/postgres/create-user.js'
+import { PostgresGetUserByEmailRepository } from './src/repositories/postgres/get-user-by-email.js'
 import { PostgresGetUserByIdRepository } from './src/repositories/postgres/get-user-by-id.js'
 import { CreateUserUseCase } from './src/use-cases/create-user.js'
 import { GetUserByIdUseCase } from './src/use-cases/get-user-by-id.js'
@@ -12,8 +13,11 @@ app.use(express.json())
 
 app.post('/api/users', async (request, response) => {
     const postgresCreateUserRepository = new PostgresCreateUserRepository()
+    const postgresGetUserByEmailRepository =
+        new PostgresGetUserByEmailRepository()
     const createUserUseCase = new CreateUserUseCase(
         postgresCreateUserRepository,
+        postgresGetUserByEmailRepository,
     )
     const createUserController = new CreateUserController(createUserUseCase)
     const { statusCode, body } = await createUserController.execute(request)

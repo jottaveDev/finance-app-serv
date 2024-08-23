@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
+import { EmailAlreadyInUseError } from '../errors/user.js'
 
 export class CreateUserUseCase {
     constructor(
@@ -16,7 +17,7 @@ export class CreateUserUseCase {
                 userParams.email,
             )
         if (userWithProvidedEmail) {
-            throw new Error('Email already exists')
+            throw new EmailAlreadyInUseError(userParams.email)
         }
         const id = uuidv4()
         const hashedPassword = await bcrypt.hash(userParams.password, 10)
