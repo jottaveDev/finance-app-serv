@@ -1,6 +1,11 @@
-import validator from 'validator'
 import { EmailAlreadyInUseError } from '../errors/user.js'
 import { badRequest, created, serverError } from './helpers.js'
+import {
+    checkIfEmailIsValid,
+    checkIfPasswordIsValid,
+    invalidEmailResponse,
+    invalidPasswordResponse,
+} from './helpers/user.js'
 
 export class CreateUserController {
     constructor(createUserUseCase) {
@@ -21,15 +26,10 @@ export class CreateUserController {
                     return badRequest({ message: `Missing param: ${field}` })
                 }
             }
-            const emailIsValid = validator.isEmail(params.email)
-            if (!emailIsValid) {
-                return badRequest({ message: 'Invalid email' })
-            }
-            if (params.password.length < 6) {
-                return badRequest({
-                    message: 'Password must be at least 6 characters',
-                })
-            }
+            const emailIsValid = checkIfEmailIsValid(params.email)
+            if (!emailIsValid) return invalidEmailResponse()
+            const passwordIsValid = checkIfPasswordIsValid(params.password)
+            if (!passwordIsValid) invalidPasswordResponse()
             const createdUser = await this.createUserUseCase.execute(params)
             return created(createdUser)
         } catch (error) {
