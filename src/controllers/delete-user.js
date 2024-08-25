@@ -1,5 +1,9 @@
 import { ok, serverError } from './helpers/http.js'
-import { checkIfIdIsValid, invalidIdResponse } from './helpers/user.js'
+import {
+    checkIfIdIsValid,
+    invalidIdResponse,
+    userNotFoundResponse,
+} from './helpers/user.js'
 
 export class DeleteUserController {
     constructor(deleteUserUseCase) {
@@ -11,8 +15,9 @@ export class DeleteUserController {
             const { userId } = httpRequest.params
             const idIsValid = checkIfIdIsValid(userId)
             if (!idIsValid) return invalidIdResponse()
-            await this.deleteUserUseCase.execute(userId)
-            return ok({ message: 'User deleted successfully.' })
+            const deletedUser = await this.deleteUserUseCase.execute(userId)
+            if (!deletedUser) return userNotFoundResponse()
+            return ok(deletedUser)
         } catch (error) {
             console.error(error)
             return serverError()
