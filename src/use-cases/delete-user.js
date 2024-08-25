@@ -1,4 +1,4 @@
-import { notFound } from '../controllers/helpers/http'
+import { notFound } from '../controllers/helpers/http.js'
 
 export class DeleteUserUseCase {
     constructor(postgresDeleteUserRepository, postgresGetUserByIdRepository) {

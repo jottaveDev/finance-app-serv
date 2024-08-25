@@ -11,8 +11,8 @@ export class DeleteUserController {
             const { userId } = httpRequest.params
             const idIsValid = checkIfIdIsValid(userId)
             if (!idIsValid) return invalidIdResponse()
-            const deletedUser = await this.deleteUserUseCase.execute(userId)
-            return ok(deletedUser)
+            await this.deleteUserUseCase.execute(userId)
+            return ok({ message: 'User deleted successfully.' })
         } catch (error) {
             console.error(error)
             return serverError()

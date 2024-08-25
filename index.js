@@ -1,16 +1,19 @@
 import 'dotenv/config.js'
 import express from 'express'
+import { DeleteUserController } from './src/controllers/delete-user.js'
 import {
     CreateUserController,
     GetUserByIdController,
     UpdateUserController,
 } from './src/controllers/index.js'
+import { PostgresDeleteUserRepository } from './src/repositories/postgres/delete-user.js'
 import {
     PostgresCreateUserRepository,
     PostgresGetUserByEmailRepository,
     PostgresGetUserByIdRepository,
     PostgresUpdateUserRepository,
 } from './src/repositories/postgres/index.js'
+import { DeleteUserUseCase } from './src/use-cases/delete-user.js'
 import {
     CreateUserUseCase,
     GetUserByIdUseCase,
@@ -43,6 +46,18 @@ app.patch('/api/users/:userId', async (request, response) => {
     )
     const updateUserController = new UpdateUserController(updateUserUseCase)
     const { statusCode, body } = await updateUserController.execute(request)
+    response.status(statusCode).json(body)
+})
+
+app.delete('/api/users/:userId', async (request, response) => {
+    const postgresDeleteUserRepository = new PostgresDeleteUserRepository()
+    const postgresGetUserByIdRepository = new PostgresGetUserByIdRepository()
+    const deleteUserUseCase = new DeleteUserUseCase(
+        postgresDeleteUserRepository,
+        postgresGetUserByIdRepository,
+    )
+    const deleteUserController = new DeleteUserController(deleteUserUseCase)
+    const { statusCode, body } = await deleteUserController.execute(request)
     response.status(statusCode).json(body)
 })
 
