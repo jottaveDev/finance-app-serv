@@ -1,11 +1,13 @@
 import { EmailAlreadyInUseError } from '../errors/user.js'
-import { badRequest, created, serverError } from './helpers.js'
 import {
+    badRequest,
     checkIfEmailIsValid,
     checkIfPasswordIsValid,
+    created,
     invalidEmailResponse,
     invalidPasswordResponse,
-} from './helpers/user.js'
+    serverError,
+} from './helpers/index.js'
 
 export class CreateUserController {
     constructor(createUserUseCase) {
@@ -29,7 +31,7 @@ export class CreateUserController {
             const emailIsValid = checkIfEmailIsValid(params.email)
             if (!emailIsValid) return invalidEmailResponse()
             const passwordIsValid = checkIfPasswordIsValid(params.password)
-            if (!passwordIsValid) invalidPasswordResponse()
+            if (!passwordIsValid) return invalidPasswordResponse()
             const createdUser = await this.createUserUseCase.execute(params)
             return created(createdUser)
         } catch (error) {

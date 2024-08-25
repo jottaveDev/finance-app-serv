@@ -1,12 +1,14 @@
-import { badRequest, ok, serverError } from './helpers.js'
 import {
+    badRequest,
     checkIfEmailIsValid,
     checkIfIdIsValid,
     checkIfPasswordIsValid,
     invalidEmailResponse,
     invalidIdResponse,
     invalidPasswordResponse,
-} from './helpers/user.js'
+    ok,
+    serverError,
+} from './helpers/index.js'
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {
@@ -17,7 +19,7 @@ export class UpdateUserController {
         try {
             const { userId } = httpRequest.params
             const idIsValid = checkIfIdIsValid(userId)
-            if (!idIsValid) invalidIdResponse()
+            if (!idIsValid) return invalidIdResponse()
             const params = httpRequest.body
             const allowedFields = [
                 'first_name',
@@ -35,11 +37,11 @@ export class UpdateUserController {
             }
             if (params.password) {
                 const passwordIsValid = checkIfPasswordIsValid(params.password)
-                if (!passwordIsValid) invalidPasswordResponse()
+                if (!passwordIsValid) return invalidPasswordResponse()
             }
             if (params.email) {
                 const emailIsValid = checkIfEmailIsValid(params.email)
-                if (!emailIsValid) invalidEmailResponse()
+                if (!emailIsValid) return invalidEmailResponse()
             }
             const updatedUser = await this.updateUserUseCase.execute(
                 userId,

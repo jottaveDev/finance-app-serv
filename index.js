@@ -1,15 +1,21 @@
 import 'dotenv/config.js'
 import express from 'express'
-import { CreateUserController } from './src/controllers/create-user.js'
-import { GetUserByIdController } from './src/controllers/get-user-by-id.js'
-import { UpdateUserController } from './src/controllers/update-user.js'
-import { PostgresCreateUserRepository } from './src/repositories/postgres/create-user.js'
-import { PostgresGetUserByEmailRepository } from './src/repositories/postgres/get-user-by-email.js'
-import { PostgresGetUserByIdRepository } from './src/repositories/postgres/get-user-by-id.js'
-import { PostgresUpdateUserRepository } from './src/repositories/postgres/update-user.js'
-import { CreateUserUseCase } from './src/use-cases/create-user.js'
-import { GetUserByIdUseCase } from './src/use-cases/get-user-by-id.js'
-import { UpdateUserUseCase } from './src/use-cases/update-user.js'
+import {
+    CreateUserController,
+    GetUserByIdController,
+    UpdateUserController,
+} from './src/controllers/index.js'
+import {
+    PostgresCreateUserRepository,
+    PostgresGetUserByEmailRepository,
+    PostgresGetUserByIdRepository,
+    PostgresUpdateUserRepository,
+} from './src/repositories/postgres/index.js'
+import {
+    CreateUserUseCase,
+    GetUserByIdUseCase,
+    UpdateUserUseCase,
+} from './src/use-cases/index.js'
 
 const app = express()
 app.use(express.json())
