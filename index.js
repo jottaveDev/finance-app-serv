@@ -1,5 +1,6 @@
 import 'dotenv/config.js'
 import express from 'express'
+import { makeCreateTransactionController } from './src/factories/controllers/transaction.js'
 import {
     makeCreateUserController,
     makeDeleteUserController,
@@ -31,6 +32,13 @@ app.patch('/api/users/:userId', async (request, response) => {
 app.delete('/api/users/:userId', async (request, response) => {
     const deleteUserController = makeDeleteUserController()
     const { statusCode, body } = await deleteUserController.execute(request)
+    response.status(statusCode).json(body)
+})
+
+app.post('/api/transactions', async (request, response) => {
+    const createTransactionController = makeCreateTransactionController()
+    const { statusCode, body } =
+        await createTransactionController.execute(request)
     response.status(statusCode).json(body)
 })
 
