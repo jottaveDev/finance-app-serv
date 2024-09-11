@@ -1,6 +1,10 @@
 import validator from 'validator'
 import { badRequest, created, serverError } from '../helpers/http.js'
-import { checkIfIdIsValid, invalidIdResponse } from '../helpers/index.js'
+import {
+    checkIfIdIsValid,
+    invalidIdResponse,
+    validateRequiredFields,
+} from '../helpers/index.js'
 
 export class CreateTransactionController {
     constructor(createTransactionUseCase) {
@@ -11,11 +15,12 @@ export class CreateTransactionController {
         try {
             const params = httpRequest.body
             const requiredFields = ['user_id', 'name', 'date', 'amount', 'type']
-            for (const field of requiredFields) {
-                if (!params[field] || field.toString().trim().length === 0) {
-                    return badRequest({ message: `Missing param: ${field}` })
-                }
-            }
+            const { ok: requiredFieldsWereProvided, missingField } =
+                validateRequiredFields(params, requiredFields)
+            if (!requiredFieldsWereProvided)
+                return badRequest({
+                    message: `The field ${missingField} is required.`,
+                })
             const isValidID = checkIfIdIsValid(params.user_id)
             if (!isValidID) return invalidIdResponse()
             if (params.amount <= 0)
