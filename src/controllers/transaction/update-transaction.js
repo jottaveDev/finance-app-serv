@@ -17,7 +17,7 @@ export class UpdateTransactionController {
 
     async execute(httpRequest) {
         try {
-            const idIsValid = checkIfIdIsValid(httpRequest.params.id)
+            const idIsValid = checkIfIdIsValid(httpRequest.params.transactionId)
             if (!idIsValid) return invalidIdResponse()
             const params = httpRequest.body
             const allowedFields = ['name', 'date', 'amount', 'type']
