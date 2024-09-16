@@ -2,6 +2,7 @@ import {
     checkIfIdIsValid,
     invalidIdResponse,
     notFound,
+    ok,
     serverError,
 } from '../helpers/index.js'
 
@@ -19,7 +20,7 @@ export class DeleteTransactionController {
                 await this.deleteTransactionUseCase.execute(transactionId)
             if (!deletedTransaction)
                 return notFound({ message: 'Transaction not found' })
-            return deletedTransaction
+            return ok(deletedTransaction)
         } catch (error) {
             console.error(error)
             return serverError()
