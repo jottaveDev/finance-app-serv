@@ -9,6 +9,7 @@ import {
 import {
     makeCreateUserController,
     makeDeleteUserController,
+    makeGetUserBalanceController,
     makeGetUserByIdController,
     makeUpdateUserController,
 } from './src/factories/controllers/user.js'
@@ -19,6 +20,12 @@ app.use(express.json())
 app.get('/api/users/:userId', async (request, response) => {
     const getUserByIdController = makeGetUserByIdController()
     const { statusCode, body } = await getUserByIdController.execute(request)
+    response.status(statusCode).json(body)
+})
+
+app.get('/api/users/:userId/balance', async (request, response) => {
+    const getUserBalanceController = makeGetUserBalanceController()
+    const { statusCode, body } = await getUserBalanceController.execute(request)
     response.status(statusCode).json(body)
 })
 
@@ -50,22 +57,25 @@ app.get('/api/transactions', async (request, response) => {
 
 app.post('/api/transactions', async (request, response) => {
     const createTransactionController = makeCreateTransactionController()
-    const { statusCode, body } =
-        await createTransactionController.execute(request)
+    const { statusCode, body } = await createTransactionController.execute(
+        request
+    )
     response.status(statusCode).json(body)
 })
 
 app.patch('/api/transactions/:transactionId', async (request, response) => {
     const updateTransactionController = makeUpdateTransactionController()
-    const { statusCode, body } =
-        await updateTransactionController.execute(request)
+    const { statusCode, body } = await updateTransactionController.execute(
+        request
+    )
     response.status(statusCode).json(body)
 })
 
 app.delete('/api/transactions/:transactionId', async (request, response) => {
     const deleteTransactionController = makeDeleteTransactionController()
-    const { statusCode, body } =
-        await deleteTransactionController.execute(request)
+    const { statusCode, body } = await deleteTransactionController.execute(
+        request
+    )
     response.status(statusCode).json(body)
 })
 
