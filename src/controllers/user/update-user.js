@@ -1,11 +1,9 @@
+import { ZodError } from 'zod'
+import { updateUserSchema } from '../../schemas/user.js'
 import {
     badRequest,
-    checkIfEmailIsValid,
     checkIfIdIsValid,
-    checkIfPasswordIsValid,
-    invalidEmailResponse,
     invalidIdResponse,
-    invalidPasswordResponse,
     ok,
     serverError,
 } from '../helpers/index.js'
@@ -21,35 +19,17 @@ export class UpdateUserController {
             const idIsValid = checkIfIdIsValid(userId)
             if (!idIsValid) return invalidIdResponse()
             const params = httpRequest.body
-            const allowedFields = [
-                'first_name',
-                'last_name',
-                'email',
-                'password',
-            ]
-            const someFieldIsNotAllowed = Object.keys(params).some(
-                (key) => !allowedFields.includes(key),
-            )
-            if (someFieldIsNotAllowed) {
-                return badRequest({
-                    message: 'Some provided field is not allowed.',
-                })
-            }
-            if (params.password) {
-                const passwordIsValid = checkIfPasswordIsValid(params.password)
-                if (!passwordIsValid) return invalidPasswordResponse()
-            }
-            if (params.email) {
-                const emailIsValid = checkIfEmailIsValid(params.email)
-                if (!emailIsValid) return invalidEmailResponse()
-            }
+            await updateUserSchema.parseAsync(params)
             const updatedUser = await this.updateUserUseCase.execute(
                 userId,
-                params,
+                params
             )
             return ok(updatedUser)
         } catch (error) {
             console.error(error)
+            if (error instanceof ZodError) {
+                return badRequest({ message: error.errors[0].message })
+            }
             return serverError()
         }
     }
