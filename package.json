@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "start:dev": "node --watch index.js",
+        "postinstall": "npx husky install && npx prisma generate",
         "pre-commit": "lint-staged",
         "migrations": "node src/db/postgres/migrations/exec.js"
     },
